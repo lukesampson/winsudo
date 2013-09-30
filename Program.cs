@@ -51,13 +51,14 @@ namespace sudo {
 				return;
 			}
 
-			var pid = Process.GetCurrentProcess().Id;
+			var thisproc = Process.GetCurrentProcess();
+			var pid = thisproc.Id;
 			var exe = Assembly.GetExecutingAssembly().Location;
 			var pwd = Environment.CurrentDirectory;
 
 			var p = new Process();
-			p.StartInfo.FileName = "powershell.exe";
-			p.StartInfo.Arguments = "-noprofile -nologo & '" + exe + "' -do " + pwd + " " + pid + " " + string.Join(" ", args) + "\nexit $lastexitcode";
+			p.StartInfo.FileName = "cmd.exe";
+			p.StartInfo.Arguments = "/s /c \"\"" + exe + "\" -do \"" + pwd + "\" " + pid + " " + string.Join(" ", args) + "\"";
 			p.StartInfo.Verb = "runas";
 			p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 

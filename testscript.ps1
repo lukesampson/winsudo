@@ -4,4 +4,5 @@ for($i = 1; $i -lt 6; $i++) {
 	write-host $i
 	start-sleep -m 300
 }
+"`$env:path: $env:path"
 exit 123
