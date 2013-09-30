@@ -30,19 +30,13 @@ namespace sudo {
 			var p = new Process();
 			var start = p.StartInfo;
 			start.FileName = "powershell.exe";
-			Console.WriteLine("-noprofile -nologo " + cmd + "\nwrite-host \"ps exit: $lastexitcode\"\nexit $lastexitcode");
-			start.Arguments = "-noprofile -nologo " + cmd + "\nwrite-host \"ps exit: $lastexitcode\"\nexit $lastexitcode";
+			start.Arguments = "-noprofile -nologo " + cmd + "\nexit $lastexitcode";
 			start.UseShellExecute = false;
 			start.WorkingDirectory = dir;
 
 			p.Start();
 			p.WaitForExit();
-			Console.WriteLine("exit code (child): " + p.ExitCode);
-			Console.WriteLine("exit code (child): " + p.ExitCode);
 			return p.ExitCode;
-			//Environment.ExitCode = 0;
-			//Environment.Exit(p.ExitCode);
-
 		}
 
 		static void Main(string[] args) {
@@ -74,9 +68,6 @@ namespace sudo {
 				Environment.Exit(1);
 			}
 			p.WaitForExit();
-
-			Console.WriteLine("exit code: " + p.ExitCode);
-			Console.ReadKey();
 
 			Environment.Exit(p.ExitCode);
 		}
