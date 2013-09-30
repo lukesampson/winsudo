@@ -10,4 +10,6 @@ $admin = ([Security.Principal.WindowsPrincipal]($id)).isinrole("Administrators")
 
 "admin? $admin"
 
+write-error "error!"
+
 exit 123
