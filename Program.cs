@@ -29,6 +29,8 @@ namespace sudo {
 			}
 
 			if(args[0] == "-do") {
+				if(args.Length < 4) { Console.Error.Write("not enough arguments"); Environment.Exit(1); }
+
 				var exit_code = Do(args[1], args[2], string.Join(" ", args.Skip(3)));
 				Environment.Exit(exit_code);
 				return;
@@ -38,13 +40,15 @@ namespace sudo {
 			var sudo_exe = Assembly.GetExecutingAssembly().Location;
 			var pwd = Environment.CurrentDirectory;
 
+			var elev_args = "-do \"" + pwd + "\" " + pid + " " + string.Join(" ", args);
+
 			var p = new Process();
 			if(ElevateWithCmd) {
-				p.StartInfo.FileName = "cmd.exe";
-				p.StartInfo.Arguments = "/s /c \"\"" + sudo_exe + "\" -do \"" + pwd + "\" " + pid + " " + string.Join(" ", args) + "\"";
+				p.StartInfo.FileName = "cmd";
+				p.StartInfo.Arguments = "/s /c \"\"" + sudo_exe + "\" " + elev_args + "\"";
 			} else {
 				p.StartInfo.FileName = sudo_exe;
-				p.StartInfo.Arguments = "-do \"" + pwd + "\" " + pid + " " + string.Join(" ", args);
+				p.StartInfo.Arguments = elev_args;
 			}
 			p.StartInfo.Verb = "runas";
 			p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
