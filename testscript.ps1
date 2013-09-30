@@ -2,7 +2,12 @@
 write-host "hi, $name" -f darkgreen
 for($i = 1; $i -lt 6; $i++) {
 	write-host $i
-	start-sleep -m 300
+	start-sleep -m 100
 }
-"`$env:path: $env:path"
+
+$id = [Security.Principal.WindowsIdentity]::GetCurrent()
+$admin = ([Security.Principal.WindowsPrincipal]($id)).isinrole("Administrators")
+
+"admin? $admin"
+
 exit 123

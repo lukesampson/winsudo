@@ -1,3 +1,3 @@
 ﻿$id = [Security.Principal.WindowsIdentity]::GetCurrent()
-"is admin?"
-([Security.Principal.WindowsPrincipal]($id)).isinrole("Administrators")
+write-host "is admin? " -nonewline
+([Security.Principal.WindowsPrincipal]($id)).isinrole("Administrators").tostring().tolower()
