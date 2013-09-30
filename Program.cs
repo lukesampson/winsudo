@@ -36,7 +36,7 @@ namespace sudo {
 			var sudo_exe = Assembly.GetExecutingAssembly().Location;
 			var pwd = Environment.CurrentDirectory;
 
-			var elev_args = "-do \"" + pwd + "\" " + pid + " " + string.Join(" ", args);
+			var elev_args = "-do \"" + pwd + "\" " + pid + " " + Serialize(args);
 
 			var p = new Process();
 			if(ElevateWithCmd) {
@@ -76,6 +76,10 @@ namespace sudo {
 			p.Start();
 			p.WaitForExit();
 			return p.ExitCode;
+		}
+
+		static string Serialize(string[] args) {
+			return string.Join(" ", args.Select(a => a.Contains(' ') ? "'" + a + "'" : a));
 		}
 	}
 }
