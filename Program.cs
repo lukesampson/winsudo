@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -66,11 +67,18 @@ namespace sudo {
 			p.StartInfo.Verb = "runas";
 			p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
-			p.Start();
+			try {
+				p.Start();
+			} catch(Win32Exception) {
+				// user didn't provide consent: cancel
+				Environment.Exit(1);
+			}
 			p.WaitForExit();
 
 			Console.WriteLine("exit code: " + p.ExitCode);
 			Console.ReadKey();
+
+			Environment.Exit(p.ExitCode);
 		}
 	}
 }
