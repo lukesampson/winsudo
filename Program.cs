@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace sudo {
 
@@ -73,7 +69,7 @@ namespace sudo {
 			var p = new Process();
 			var start = p.StartInfo;
 			start.FileName = "powershell.exe";
-			start.Arguments = "-noprofile -nologo " + cmd + "\nexit $lastexitcode";
+			start.Arguments = "-noprofile " + cmd + "\nexit $lastexitcode";
 			start.UseShellExecute = false;
 			start.WorkingDirectory = dir;
 
