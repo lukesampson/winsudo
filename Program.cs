@@ -12,6 +12,10 @@ using System.Threading.Tasks;
 namespace sudo {
 
 	class Program {
+		// elevating with cmd.exe instead of calling sudo.exe directly
+		// gives a blue UAC instead of the yellow "unknown publisher" one.
+		const bool ElevateWithCmd = false;
+
 		[DllImport("kernel32.dll", SetLastError = true)]
 		static extern bool AttachConsole(uint dwProcessId);
 
@@ -35,8 +39,13 @@ namespace sudo {
 			var pwd = Environment.CurrentDirectory;
 
 			var p = new Process();
-			p.StartInfo.FileName = "cmd.exe";
-			p.StartInfo.Arguments = "/s /c \"\"" + sudo_exe + "\" -do \"" + pwd + "\" " + pid + " " + string.Join(" ", args) + "\"";
+			if(ElevateWithCmd) {
+				p.StartInfo.FileName = "cmd.exe";
+				p.StartInfo.Arguments = "/s /c \"\"" + sudo_exe + "\" -do \"" + pwd + "\" " + pid + " " + string.Join(" ", args) + "\"";
+			} else {
+				p.StartInfo.FileName = sudo_exe;
+				p.StartInfo.Arguments = "-do \"" + pwd + "\" " + pid + " " + string.Join(" ", args);
+			}
 			p.StartInfo.Verb = "runas";
 			p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
